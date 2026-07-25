@@ -1,0 +1,116 @@
+aid: insurance-council-australia
+url: https://raw.githubusercontent.com/api-evangelist/insurance-council-australia/refs/heads/main/apis.yml
+name: Insurance Council of Australia
+kind: company
+description: >-
+  The Insurance Council of Australia (ICA) is the representative body for
+  Australia's general insurance industry, whose members write approximately 90% of
+  total premium income for private sector general insurers and reinsurers, spanning
+  home and contents, motor, travel, liability, professional indemnity, commercial
+  property and directors and officers lines. The ICA administers the General Insurance
+  Code of Practice, issues catastrophe and significant event declarations, operates
+  the member Data Hub that reports claim counts, incurred losses and closed rates
+  for declared events, and advocates on resilience, climate risk, building standards
+  and insurance affordability. It is a market body rather than a carrier — it sells
+  no policies and exposes no quote, bind, issue or FNOL API. Its API posture is
+  partner-gated with no public developer program: developer, developers, docs and
+  api subdomains do not resolve, and /developers/, /developer/, /partners/ and
+  /integrations/ all return 404. The only integration surface is the member portal
+  at memberportal.insurancecouncil.com.au, an Azure AD B2C (OpenID Connect
+  authorization code) login wall for member insurers. Catastrophe and resilience
+  data is published as PDF reports and a downloadable XLSX master file rather than
+  through an API, and no ACORD, AL3 or NGDS reference appears anywhere on the site —
+  Australia's insurance data seam is the Consumer Data Right, which was designated
+  for general insurance and then deferred.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Insurance
+- Australia
+- General Insurance
+- Industry Association
+- Property and Casualty
+- Claims
+- Catastrophe
+- Risk Data
+- Code of Practice
+created: '2026-07-25'
+modified: '2026-07-25'
+specificationVersion: '0.19'
+apis:
+- aid: insurance-council-australia:wordpress-rest-api
+  name: Insurance Council of Australia WordPress REST API
+  description: insurancecouncil.com.au runs on WordPress and leaves the standard
+    WordPress REST API reachable anonymously at /wp-json/, returning JSON for pages,
+    media (the PDF publication corpus of media releases, submissions and reports),
+    categories, tags and site search. This is incidental CMS infrastructure rather
+    than an ICA API product — the ICA publishes no documentation for it, /wp/v2/posts
+    returns an empty array, /wp/v2/users returns 401, and the insurer, resource and
+    insurance-type custom post types behind Find an Insurer are not registered with
+    the REST API (that directory is served by wp-admin/admin-ajax.php instead). It
+    carries no insurance data model, no quote, bind, issue or FNOL operations, and
+    no authentication for the read paths.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://insurancecouncil.com.au/wp-json/wp/v2
+  tags:
+  - Content
+  - WordPress
+  - REST
+  - JSON
+  properties:
+  - type: Documentation
+    url: https://developer.wordpress.org/rest-api/
+  - type: APIReference
+    url: https://developer.wordpress.org/rest-api/reference/
+  - type: Discovery
+    url: https://insurancecouncil.com.au/wp-json/
+- aid: insurance-council-australia:news-rss-feed
+  name: Insurance Council of Australia News RSS Feed
+  description: The ICA publishes its news, media releases, catastrophe declarations
+    and resource updates as a standard RSS 2.0 feed at /feed/, served as
+    application/rss+xml. This is the only first-party machine-readable syndication
+    surface the organisation advertises, and it is read-only, unauthenticated and
+    undocumented beyond the WordPress default.
+  humanURL: https://insurancecouncil.com.au/news-hub/
+  baseURL: https://insurancecouncil.com.au
+  tags:
+  - Feed
+  - News
+  - RSS
+  - Syndication
+  properties:
+  - type: Documentation
+    url: https://insurancecouncil.com.au/news-hub/news-resources/
+  - type: RSSFeed
+    url: https://insurancecouncil.com.au/feed/
+common:
+- type: Website
+  url: https://insurancecouncil.com.au/
+- type: About
+  url: https://insurancecouncil.com.au/about-us/our-role/
+- type: Portal
+  url: https://memberportal.insurancecouncil.com.au/
+- type: Documentation
+  url: https://insurancecouncil.com.au/industry-members/data-hub/
+- type: Documentation
+  url: https://insurancecouncil.com.au/code-of-practice/
+- type: Documentation
+  url: https://insurancecouncil.com.au/news-hub/current-catastrophes/
+- type: Dataset
+  url: https://insurancecouncil.com.au/wp-content/uploads/2026/07/ICA-Historical-Normalised-Catastrophe-Master-Updated-2026_06.xlsx
+- type: Dataset
+  url: https://insurancecouncil.com.au/ica-reports/
+- type: Blog
+  url: https://insurancecouncil.com.au/news-hub/
+- type: RSSFeed
+  url: https://insurancecouncil.com.au/feed/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/insurance-council-of-australia/
+- type: Twitter
+  url: https://twitter.com/icaus
+- type: YouTube
+  url: https://www.youtube.com/user/insurancecouncil
+- type: Facebook
+  url: https://www.facebook.com/InsuranceCouncilofAustralia
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
