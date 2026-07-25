@@ -1,0 +1,198 @@
+generated: '2026-07-25'
+method: derived
+source: |
+  json-schema/insurance-council-australia-wp-v2-*.json (harvested by HTTP OPTIONS)
+  plus GET /wp-json/wp/v2/types and GET /wp-json/wp/v2/taxonomies, 2026-07-25
+note: |
+  There is no insurance data model exposed by the Insurance Council of Australia.
+  This entity graph is derived strictly from the resource schemas the incidental
+  WordPress REST API publishes, and it is a content-management model: pages, media
+  attachments, taxonomy terms and site metadata. The insurance-bearing custom post
+  types the site actually runs on — insurer, resource, ins-type, ins-topic,
+  campaign — are registered in WordPress but NOT registered with the REST API, and
+  therefore have no machine-readable schema. That absence is the substantive finding.
+rest_registered_types:
+- name: page
+  rest_base: pages
+  schema: json-schema/insurance-council-australia-wp-v2-pages.json
+  records_observed: 124
+- name: attachment
+  rest_base: media
+  schema: json-schema/insurance-council-australia-wp-v2-media.json
+  note: The PDF publication corpus (media releases, submissions, ICA reports) is
+    exposed here.
+- name: post
+  rest_base: posts
+  note: Registered but returns an empty collection — ICA editorial content does not
+    live in the core post type.
+- name: comment
+  rest_base: comments
+  schema: json-schema/insurance-council-australia-wp-v2-comments.json
+- name: elementor_library
+  rest_base: elementor_library
+  note: Page-builder template store, not content.
+- name: elementor_snippet
+  rest_base: elementor_snippet
+not_rest_registered_types:
+- insurer
+- resource
+- ins-type
+- ins-topic
+- ins-faqs
+- cat-faq
+- insurer-category
+- campaign
+not_rest_registered_note: |
+  Present in the sitemap index as child sitemaps and served on the site, but absent
+  from GET /wp/v2/types. The Find an Insurer directory is served by
+  wp-admin/admin-ajax.php (postgrid_ajax_load) behind a nonce instead.
+entities:
+- name: page
+  id_field: id
+  key_fields:
+  - id
+  - slug
+  - link
+  - title
+  - content
+  - excerpt
+  - status
+  - date
+  - modified
+  - author
+  - parent
+  - featured_media
+  - menu_order
+  - template
+  - meta
+  - acf
+- name: attachment
+  id_field: id
+  key_fields:
+  - id
+  - slug
+  - link
+  - title
+  - media_type
+  - mime_type
+  - source_url
+  - filename
+  - filesize
+  - media_details
+  - alt_text
+  - caption
+  - author
+  - post
+- name: category
+  id_field: id
+  key_fields:
+  - id
+  - name
+  - slug
+  - taxonomy
+  - parent
+  - count
+  - link
+- name: tag
+  id_field: id
+  key_fields:
+  - id
+  - name
+  - slug
+  - taxonomy
+  - count
+  - link
+- name: comment
+  id_field: id
+  key_fields:
+  - id
+  - post
+  - parent
+  - author
+  - content
+  - status
+  - date
+- name: type
+  id_field: slug
+  key_fields:
+  - name
+  - slug
+  - rest_base
+  - rest_namespace
+  - taxonomies
+  - supports
+  - visibility
+- name: taxonomy
+  id_field: slug
+  key_fields:
+  - name
+  - slug
+  - rest_base
+  - types
+  - hierarchical
+- name: status
+  id_field: slug
+  key_fields:
+  - name
+  - slug
+  - public
+  - private
+  - protected
+  - queryable
+- name: search-result
+  id_field: id
+  key_fields:
+  - id
+  - title
+  - url
+  - type
+  - subtype
+relationships:
+- from: page
+  to: page
+  kind: belongs_to
+  via: parent
+- from: page
+  to: attachment
+  kind: has_one
+  via: featured_media
+- from: page
+  to: user
+  kind: belongs_to
+  via: author
+  note: The user resource itself is 401-gated.
+- from: attachment
+  to: page
+  kind: belongs_to
+  via: post
+- from: comment
+  to: page
+  kind: belongs_to
+  via: post
+- from: comment
+  to: comment
+  kind: belongs_to
+  via: parent
+- from: category
+  to: category
+  kind: belongs_to
+  via: parent
+- from: taxonomy
+  to: type
+  kind: has_many
+  via: types
+- from: type
+  to: taxonomy
+  kind: has_many
+  via: taxonomies
+custom_fields:
+  plugin: Advanced Custom Fields
+  evidence: an `acf` object is present on the page, attachment, category and comment
+    schemas
+insurance_entities:
+  present: false
+  note: |
+    No policy, quote, risk, claim, catastrophe, event, insurer or code-subscriber
+    entity is exposed anywhere in the machine-readable surface. The catastrophe
+    dataset ICA does publish is an XLSX download, and the Data Hub figures are
+    rendered server-side as HTML.

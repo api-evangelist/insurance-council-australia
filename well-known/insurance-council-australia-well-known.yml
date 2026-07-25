@@ -1,0 +1,50 @@
+generated: '2026-07-25'
+method: searched
+source: live probes of every apis.yml host on 2026-07-25
+note: |
+  The Insurance Council of Australia publishes no /.well-known/ discovery surface on
+  its own hosts — every RFC-defined path returns 404 on insurancecouncil.com.au and
+  on the member portal. The single well-known document that does resolve belongs to
+  the third-party identity provider behind the member portal login wall: the Azure
+  AD B2C tenant icab2cprod.b2clogin.com, whose OpenID Connect discovery document
+  returns HTTP 200 anonymously. It is captured verbatim because it is the only
+  machine-readable authorization contract on the ICA estate.
+hosts:
+- host: https://insurancecouncil.com.au
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /security.txt
+    status: 404
+  - path: /llms.txt
+    status: 404
+- host: https://memberportal.insurancecouncil.com.au
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 500
+    note: Returns an application error page rather than an RFC 8414 document.
+- host: https://icab2cprod.b2clogin.com
+  role: identity provider for the member portal (Azure AD B2C, policy b2c_1_signin)
+  documents:
+  - path: /04c7fa07-b168-495f-9dcc-bcfceb1a274e/b2c_1_signin/v2.0/.well-known/openid-configuration
+    status: 200
+    file: insurance-council-australia-openid-configuration.json
+    content_type: application/json
+    issuer: https://icab2cprod.b2clogin.com/tfp/04c7fa07-b168-495f-9dcc-bcfceb1a274e/b2c_1_signin/v2.0/
+security_txt:
+  exists: false
+  note: No RFC 9116 security.txt is published at either the apex or the member portal.

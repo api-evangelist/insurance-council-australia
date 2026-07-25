@@ -1,0 +1,55 @@
+generated: '2026-07-25'
+method: searched
+source: live error responses observed on https://insurancecouncil.com.au/wp-json/ 2026-07-25
+format: wordpress-rest-error
+note: |
+  The Insurance Council of Australia publishes no error reference. This catalogue is
+  the set of error envelopes actually returned by the anonymously reachable
+  WordPress REST API on the ICA host, each captured from a live probe. The envelope
+  is the WordPress REST convention — a JSON object with code, message and data — not
+  RFC 9457 application/problem+json; the content-type on error responses is
+  application/json.
+envelope:
+  content_type: application/json
+  shape:
+    code: machine-readable error slug
+    message: human-readable message
+    data.status: HTTP status code, repeated in the body
+    data.params: per-parameter messages (validation errors only)
+    data.details: per-parameter nested error objects (validation errors only)
+  rfc9457: false
+problems:
+- status: 404
+  code: rest_no_route
+  title: No route was found matching the URL and request method.
+  observed_at: GET /wp-json/wp/v2/nonexistent
+  remediation: Check the route against the discovery document at /wp-json/.
+- status: 404
+  code: rest_post_invalid_id
+  title: Invalid post ID.
+  observed_at: GET /wp-json/wp/v2/pages/99999999
+  remediation: Enumerate valid ids from the collection endpoint first.
+- status: 401
+  code: rest_user_cannot_view
+  title: Sorry, you are not allowed to list users.
+  observed_at: GET /wp-json/wp/v2/users
+  remediation: Authentication is required; no credential is issued to third parties.
+- status: 401
+  code: rest_forbidden
+  title: Sorry, you are not allowed to do that.
+  observed_at: |
+    POST /wp-json/mcp/mcp-adapter-default-server (JSON-RPC tools/list) and
+    GET /wp-json/wp-abilities/v1/abilities
+  remediation: |
+    These surfaces exist on the estate but are gated to authenticated WordPress
+    users; there is no public credential path.
+- status: 400
+  code: rest_invalid_param
+  title: 'Invalid parameter(s): per_page'
+  observed_at: GET /wp-json/wp/v2/pages?per_page=999
+  detail_code: rest_out_of_bounds
+  detail_message: per_page must be between 1 (inclusive) and 100 (inclusive)
+  remediation: Keep per_page within 1-100 and paginate with the page parameter.
+cross_references:
+  conventions: conventions/insurance-council-australia-conventions.yml
+  authentication: authentication/insurance-council-australia-authentication.yml

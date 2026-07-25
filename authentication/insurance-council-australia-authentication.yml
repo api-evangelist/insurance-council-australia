@@ -1,0 +1,100 @@
+generated: '2026-07-25'
+method: searched
+source: live probes 2026-07-25 + https://icab2cprod.b2clogin.com/04c7fa07-b168-495f-9dcc-bcfceb1a274e/b2c_1_signin/v2.0/.well-known/openid-configuration
+note: |
+  Derived by probe rather than from an OpenAPI document — the Insurance Council of
+  Australia publishes no machine-readable API specification. There are two distinct
+  authentication realms on the estate: an anonymous public read surface (the
+  incidental WordPress REST API and the RSS feed, which require no credential at
+  all) and a member-only human sign-in gate (Azure AD B2C OpenID Connect) fronting
+  the member portal. No machine-to-machine credential, API key, or client
+  registration path is offered to third parties.
+summary:
+  types:
+  - none
+  - openIdConnect
+  api_key_in: []
+  oauth2_flows:
+  - authorizationCode
+  - implicit
+  public_read_requires_auth: false
+  self_serve_registration: false
+schemes:
+- name: anonymous
+  type: none
+  applies_to:
+  - https://insurancecouncil.com.au/wp-json/wp/v2
+  - https://insurancecouncil.com.au/feed/
+  evidence: |
+    GET /wp-json/ returned HTTP 200 with "authentication": [] — WordPress advertises
+    no authentication scheme on this install. Confirmed anonymous 200 on
+    /wp/v2/pages, /wp/v2/media, /wp/v2/categories, /wp/v2/tags, /wp/v2/types,
+    /wp/v2/taxonomies, /wp/v2/statuses, /wp/v2/search, /wp/v2/comments.
+- name: azure-ad-b2c-oidc
+  type: openIdConnect
+  applies_to:
+  - https://memberportal.insurancecouncil.com.au/
+  openIdConnectUrl: https://icab2cprod.b2clogin.com/04c7fa07-b168-495f-9dcc-bcfceb1a274e/b2c_1_signin/v2.0/.well-known/openid-configuration
+  discovery_status: 200
+  issuer: https://icab2cprod.b2clogin.com/tfp/04c7fa07-b168-495f-9dcc-bcfceb1a274e/b2c_1_signin/v2.0/
+  authorization_endpoint: https://icab2cprod.b2clogin.com/04c7fa07-b168-495f-9dcc-bcfceb1a274e/b2c_1_signin/oauth2/v2.0/authorize
+  token_endpoint: https://icab2cprod.b2clogin.com/04c7fa07-b168-495f-9dcc-bcfceb1a274e/b2c_1_signin/oauth2/v2.0/token
+  end_session_endpoint: https://icab2cprod.b2clogin.com/04c7fa07-b168-495f-9dcc-bcfceb1a274e/b2c_1_signin/oauth2/v2.0/logout
+  jwks_uri: https://icab2cprod.b2clogin.com/04c7fa07-b168-495f-9dcc-bcfceb1a274e/b2c_1_signin/discovery/v2.0/keys
+  response_types_supported:
+  - code
+  - code id_token
+  - code token
+  - code id_token token
+  - id_token
+  - id_token token
+  - token
+  - token id_token
+  token_endpoint_auth_methods_supported:
+  - client_secret_post
+  - client_secret_basic
+  id_token_signing_alg_values_supported:
+  - RS256
+  subject_types_supported:
+  - pairwise
+  scopes_supported:
+  - openid
+  claims_supported:
+  - emails
+  - given_name
+  - family_name
+  - oid
+  - sub
+  - idp
+  - tfp
+  - iss
+  - iat
+  - exp
+  - aud
+  - acr
+  - nonce
+  - auth_time
+  client_credentials: false
+  dynamic_client_registration: false
+  note: |
+    A human sign-in flow for member insurers, not an API authorization server. No
+    client-credentials grant is advertised, the scope catalogue is limited to
+    openid, and no registration endpoint is published.
+- name: wordpress-privileged
+  type: cookie+nonce / application-password
+  applies_to:
+  - https://insurancecouncil.com.au/wp-json/
+  public: false
+  evidence: |
+    Write and administrative routes reject anonymous callers: GET /wp/v2/users
+    returned 401 rest_user_cannot_view, POST /wp-json/mcp/mcp-adapter-default-server
+    (JSON-RPC tools/list) returned 401 rest_forbidden, and
+    /wp-json/wp-abilities/v1/abilities returned 401 rest_forbidden. The install
+    registers /wp/v2/users/<id>/application-passwords routes, and CORS advertises
+    Authorization and X-WP-Nonce in access-control-allow-headers, but no credential
+    is issued to third parties.
+docs: https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/
+cross_references:
+  scopes: scopes/insurance-council-australia-scopes.yml
+  conventions: conventions/insurance-council-australia-conventions.yml
+  well_known: well-known/insurance-council-australia-well-known.yml

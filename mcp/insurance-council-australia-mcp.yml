@@ -1,0 +1,53 @@
+generated: '2026-07-25'
+method: searched
+source: https://insurancecouncil.com.au/wp-json/mcp (HTTP 200, route discovery) and
+  a live JSON-RPC probe of the adapter endpoint, 2026-07-25
+status: gated
+note: |
+  An MCP server route IS registered on the Insurance Council of Australia estate —
+  the WordPress MCP adapter, discoverable in the /wp-json/ namespace list as `mcp`
+  alongside `wp-abilities/v1`. It is not a product, not documented, and not usable
+  anonymously: a JSON-RPC tools/list call returns HTTP 401. This artifact records
+  the surface honestly, including the fact that the tool schemas cannot be
+  introspected without an authenticated WordPress credential that the ICA issues to
+  no third party.
+server:
+  name: insurance-council-australia-wordpress-mcp
+  transport: http
+  url: https://insurancecouncil.com.au/wp-json/mcp/mcp-adapter-default-server
+  methods:
+  - POST
+  - GET
+  - DELETE
+  discovery_url: https://insurancecouncil.com.au/wp-json/mcp
+  discovery_status: 200
+  implementation: WordPress MCP adapter (mcp namespace + wp-abilities/v1)
+  official: false
+  documented_by_provider: false
+probes:
+- request: POST /wp-json/mcp/mcp-adapter-default-server {"jsonrpc":"2.0","id":1,"method":"tools/list"}
+  accept: application/json, text/event-stream
+  status: 401
+  body: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+- request: POST /wp-json/mcp/mcp-adapter-default-server initialize (protocolVersion
+    2025-06-18)
+  status: 401
+  body: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+- request: GET /wp-json/wp-abilities/v1/abilities
+  status: 401
+  body: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+- request: GET /wp-json/mcp
+  status: 200
+  note: Returns the namespace route table, confirming the adapter is registered.
+tools: []
+tools_note: |
+  The live tool list is auth-gated. No tool names, descriptions or inputSchemas
+  could be read, and none are published in documentation, so none are recorded —
+  no candidate tool list is derived either, because there is no OpenAPI on this
+  provider to derive one from.
+authorization:
+  scheme: WordPress cookie + X-WP-Nonce or application password
+  public_credential_path: false
+  oauth: false
+  well_known_oauth_authorization_server: 404
+  well_known_oauth_protected_resource: 404

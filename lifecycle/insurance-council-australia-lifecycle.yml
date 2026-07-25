@@ -1,0 +1,54 @@
+generated: '2026-07-25'
+method: searched
+source: live probes of insurancecouncil.com.au 2026-07-25
+note: |
+  The Insurance Council of Australia publishes no API lifecycle commitments of any
+  kind. There is no developer changelog, no deprecation policy, no sunset-header
+  contract, no SLA and no status page — consistent with an organisation that runs no
+  API program. The only versioning present is the WordPress core REST namespace on
+  the incidental CMS surface, which the ICA neither controls nor documents.
+versioning:
+  scheme: uri-path namespace
+  current: wp/v2
+  provider_policy: null
+  docs: https://developer.wordpress.org/rest-api/
+  note: Inherited from WordPress core, not an ICA versioning commitment.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  note: No RFC 8594 Sunset or Deprecation header was returned on any probe; no
+    deprecation policy page exists.
+sla:
+  url: null
+  uptime_target: null
+  published: false
+status_page:
+  url: null
+  exists: false
+  probes:
+  - url: https://status.insurancecouncil.com.au/
+    status: 0
+    note: DNS does not resolve.
+support:
+  url: https://insurancecouncil.com.au/about-us/get-in-touch/
+  complaints: https://insurancecouncil.com.au/about-us/complaints-concerns/
+  note: General organisational contact routes; no developer support channel.
+changelog:
+  url: null
+  exists: false
+  note: |
+    The news hub (https://insurancecouncil.com.au/news-hub/) and its RSS feed are an
+    organisational newsroom, not an API changelog. They are wired as Blog/RSSFeed,
+    not as ChangeLog.
+deprecated_operations: []
+content_lifecycle:
+  note: |
+    Where ICA does version something publicly it is documents, not interfaces: the
+    General Insurance Code of Practice is published with current and past codes and
+    an independent review cycle, and the historical normalised catastrophe master
+    file is re-published as a dated XLSX (currently the June 2026 update).
+  code_of_practice: https://insurancecouncil.com.au/code-of-practice/
+  past_codes: https://insurancecouncil.com.au/code-of-practice/past-codes/
+  catastrophe_master: https://insurancecouncil.com.au/wp-content/uploads/2026/07/ICA-Historical-Normalised-Catastrophe-Master-Updated-2026_06.xlsx

@@ -63,6 +63,54 @@ apis:
     url: https://developer.wordpress.org/rest-api/reference/
   - type: Discovery
     url: https://insurancecouncil.com.au/wp-json/
+  - type: DiscoveryDocument
+    url: discovery/insurance-council-australia-wp-json-root.json
+  - type: JSONSchema
+    url: json-schema/insurance-council-australia-wp-v2-pages.json
+  - type: JSONSchema
+    url: json-schema/insurance-council-australia-wp-v2-media.json
+  - type: JSONSchema
+    url: json-schema/insurance-council-australia-wp-v2-categories.json
+  - type: JSONSchema
+    url: json-schema/insurance-council-australia-wp-v2-tags.json
+  - type: JSONSchema
+    url: json-schema/insurance-council-australia-wp-v2-types.json
+  - type: JSONSchema
+    url: json-schema/insurance-council-australia-wp-v2-taxonomies.json
+  - type: JSONSchema
+    url: json-schema/insurance-council-australia-wp-v2-statuses.json
+  - type: JSONSchema
+    url: json-schema/insurance-council-australia-wp-v2-search.json
+  - type: JSONSchema
+    url: json-schema/insurance-council-australia-wp-v2-comments.json
+  - type: ErrorCatalog
+    url: errors/insurance-council-australia-problem-types.yml
+  - type: Conventions
+    url: conventions/insurance-council-australia-conventions.yml
+  - type: DataModel
+    url: data-model/insurance-council-australia-data-model.yml
+- aid: insurance-council-australia:mcp-adapter
+  name: Insurance Council of Australia WordPress MCP Adapter (gated)
+  description: A WordPress MCP adapter server route is registered on the ICA estate
+    in the mcp namespace, alongside a wp-abilities/v1 namespace. Namespace discovery
+    at /wp-json/mcp returns HTTP 200 and lists the adapter endpoint with POST, GET
+    and DELETE methods, but an anonymous JSON-RPC initialize or tools/list returns
+    HTTP 401 rest_forbidden. The surface genuinely exists and is genuinely not
+    publicly usable — no tool names, descriptions or input schemas can be read
+    without a WordPress credential the ICA issues to no third party, and none are
+    published in documentation. Recorded as a gated surface rather than a product.
+  humanURL: https://insurancecouncil.com.au/wp-json/mcp
+  baseURL: https://insurancecouncil.com.au/wp-json/mcp/mcp-adapter-default-server
+  tags:
+  - MCP
+  - Agents
+  - WordPress
+  - Gated
+  properties:
+  - type: MCPServer
+    url: mcp/insurance-council-australia-mcp.yml
+  - type: Discovery
+    url: https://insurancecouncil.com.au/wp-json/mcp
 - aid: insurance-council-australia:news-rss-feed
   name: Insurance Council of Australia News RSS Feed
   description: The ICA publishes its news, media releases, catastrophe declarations
@@ -83,6 +131,32 @@ apis:
   - type: RSSFeed
     url: https://insurancecouncil.com.au/feed/
 common:
+- type: DomainSecurity
+  url: security/insurance-council-australia-domain-security.yml
+- type: Authentication
+  url: authentication/insurance-council-australia-authentication.yml
+- type: OAuthScopes
+  url: scopes/insurance-council-australia-scopes.yml
+- type: WellKnown
+  url: well-known/insurance-council-australia-well-known.yml
+- type: OpenIDConnect
+  url: well-known/insurance-council-australia-openid-configuration.json
+- type: Conventions
+  url: conventions/insurance-council-australia-conventions.yml
+- type: ErrorCatalog
+  url: errors/insurance-council-australia-problem-types.yml
+- type: DataModel
+  url: data-model/insurance-council-australia-data-model.yml
+- type: Conformance
+  url: conformance/insurance-council-australia-conformance.yml
+- type: Lifecycle
+  url: lifecycle/insurance-council-australia-lifecycle.yml
+- type: MCPServer
+  url: mcp/insurance-council-australia-mcp.yml
+- type: LLMsTxt
+  url: llms/insurance-council-australia-llms.txt
+- type: DiscoveryDocument
+  url: discovery/insurance-council-australia-wp-json-root.json
 - type: Website
   url: https://insurancecouncil.com.au/
 - type: About
@@ -101,6 +175,14 @@ common:
   url: https://insurancecouncil.com.au/ica-reports/
 - type: Blog
   url: https://insurancecouncil.com.au/news-hub/
+- type: Support
+  url: https://insurancecouncil.com.au/about-us/get-in-touch/
+- type: PrivacyPolicy
+  url: https://insurancecouncil.com.au/about-us/privacy-policy/
+- type: TermsOfService
+  url: https://insurancecouncil.com.au/about-us/disclaimer/
+- type: Login
+  url: https://memberportal.insurancecouncil.com.au/
 - type: RSSFeed
   url: https://insurancecouncil.com.au/feed/
 - type: LinkedIn

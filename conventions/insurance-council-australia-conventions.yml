@@ -1,0 +1,123 @@
+generated: '2026-07-25'
+method: searched
+source: |
+  live response headers and payloads from https://insurancecouncil.com.au/wp-json/
+  observed 2026-07-25; upstream semantics documented at
+  https://developer.wordpress.org/rest-api/
+note: |
+  The Insurance Council of Australia documents no API conventions of its own. What is
+  recorded here are the cross-cutting semantics actually exhibited by the two live
+  anonymous surfaces — the incidental WordPress REST API and the RSS feed — verified
+  against real responses rather than assumed from the WordPress defaults.
+authentication:
+  style: none for public reads; cookie + X-WP-Nonce or application password for
+    privileged routes
+  header: Authorization (advertised in access-control-allow-headers, not issued to
+    third parties)
+  artifact: authentication/insurance-council-australia-authentication.yml
+idempotency:
+  supported: false
+  note: |
+    No idempotency key header, parameter or retry contract is documented or
+    exhibited. Write methods on this estate are not available to anonymous callers
+    at all, so there is no idempotency surface to record.
+pagination:
+  style: page-number
+  params:
+  - name: page
+    default: 1
+  - name: per_page
+    default: 10
+    min: 1
+    max: 100
+    enforced: true
+    evidence: per_page=999 returned 400 rest_invalid_param / rest_out_of_bounds
+  - name: offset
+  - name: search
+  - name: order
+  - name: orderby
+  response_headers:
+  - name: X-WP-Total
+    observed_value: '124'
+    description: total number of records in the collection
+  - name: X-WP-TotalPages
+    observed_value: '62'
+    description: total number of pages at the requested per_page
+  link_header:
+    supported: true
+    example: <https://insurancecouncil.com.au/wp-json/wp/v2/pages?per_page=2&page=2>;
+      rel="next"
+field_selection:
+  supported: true
+  params:
+  - name: _fields
+    description: comma-separated list of top-level fields to return
+  - name: _embed
+    description: inline embedded resources referenced from _links
+  - name: context
+    values:
+    - view
+    - embed
+    - edit
+    description: response shape varies by context; edit requires authentication
+hypermedia:
+  supported: true
+  style: HAL-like _links object plus _embedded when _embed is requested
+  discovery: https://insurancecouncil.com.au/wp-json/
+versioning:
+  scheme: uri-path namespace
+  current: wp/v2
+  namespaces_registered: 28
+  routes_registered: 420
+  provider_policy: none published by the ICA; versioning follows upstream WordPress core
+error_envelope:
+  format: wordpress-rest-error
+  rfc9457: false
+  artifact: errors/insurance-council-australia-problem-types.yml
+rate_limiting:
+  documented: false
+  signalling_headers: []
+  note: |
+    No RateLimit or X-RateLimit headers were returned on any probe. A Wordfence WAF
+    is present on the install and may throttle abusive callers without advertising
+    a quota contract.
+caching:
+  cache_control: max-age=600, must-revalidate
+  cdn: WP Engine
+  note: Responses are edge-cached for ten minutes.
+cors:
+  allow_headers:
+  - Authorization
+  - X-WP-Nonce
+  - Content-Disposition
+  - Content-MD5
+  - Content-Type
+  expose_headers:
+  - X-WP-Total
+  - X-WP-TotalPages
+  - Link
+robots:
+  x_robots_tag: noindex
+  note: The JSON API responses are marked noindex.
+content_types:
+  request: application/json
+  response: application/json; charset=UTF-8
+  feed: application/rss+xml
+schema_discovery:
+  supported: true
+  method: HTTP OPTIONS on any collection route returns a JSON Schema for the resource
+  captured:
+  - json-schema/insurance-council-australia-wp-v2-pages.json
+  - json-schema/insurance-council-australia-wp-v2-media.json
+  - json-schema/insurance-council-australia-wp-v2-categories.json
+  - json-schema/insurance-council-australia-wp-v2-tags.json
+  - json-schema/insurance-council-australia-wp-v2-types.json
+  - json-schema/insurance-council-australia-wp-v2-taxonomies.json
+  - json-schema/insurance-council-australia-wp-v2-statuses.json
+  - json-schema/insurance-council-australia-wp-v2-search.json
+  - json-schema/insurance-council-australia-wp-v2-comments.json
+cross_references:
+  errors: errors/insurance-council-australia-problem-types.yml
+  lifecycle: lifecycle/insurance-council-australia-lifecycle.yml
+  authentication: authentication/insurance-council-australia-authentication.yml
+  data_model: data-model/insurance-council-australia-data-model.yml

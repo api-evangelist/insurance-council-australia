@@ -1,0 +1,121 @@
+generated: '2026-07-25'
+method: derived
+source: |
+  Derived from artifacts already harvested in this repo — the WordPress REST
+  discovery document, the OPTIONS JSON Schemas, the observed error envelopes, and
+  the Azure AD B2C OpenID Connect discovery document — plus a search of
+  insurancecouncil.com.au for compliance and standards claims, 2026-07-25.
+note: |
+  The Insurance Council of Australia makes no API standards or certification claims
+  anywhere on its site. Everything asserted below is evidence-backed from live
+  probes; everything else is recorded as conforms:false because it is genuinely
+  absent, not because it was untested. The insurance-specific rows are the point of
+  this file: no ACORD, no NGDS, no FHIR-style domain model, and Australia's Consumer
+  Data Right — the seam that would have created an open-insurance obligation — was
+  designated for general insurance and then deferred.
+standards:
+- id: openid-connect-discovery
+  conforms: true
+  evidence: |
+    Azure AD B2C discovery document at .well-known/openid-configuration returns 200
+    with issuer, authorization_endpoint, token_endpoint, jwks_uri and RS256 id_token
+    signing. Captured at well-known/insurance-council-australia-openid-configuration.json
+- id: oauth2
+  conforms: true
+  evidence: authorization code and implicit response types advertised by the B2C
+    tenant; human sign-in only, no client-credentials grant.
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: false
+  evidence: /.well-known/oauth-authorization-server returns 404 on the apex and 500
+    on the member portal.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 on every host probed.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: |
+    Errors use the WordPress envelope {code, message, data.status} with content-type
+    application/json, not application/problem+json. See
+    errors/insurance-council-australia-problem-types.yml
+- id: json-schema
+  conforms: true
+  evidence: |
+    HTTP OPTIONS on each wp/v2 collection returns a JSON Schema for the resource;
+    nine were harvested into json-schema/.
+- id: openapi
+  conforms: false
+  evidence: no OpenAPI or Swagger document exists at any probed path on any host.
+- id: asyncapi
+  conforms: false
+  evidence: no event, streaming or webhook surface exists.
+- id: graphql
+  conforms: false
+  evidence: /graphql and /wp-json/graphql both 404.
+- id: grpc
+  conforms: false
+  evidence: no published .proto artifacts.
+- id: mcp
+  conforms: partial
+  evidence: |
+    A WordPress MCP adapter route is registered and its namespace discovery returns
+    200, but JSON-RPC initialize and tools/list return 401. Protocol support exists
+    on the estate; it is not publicly exercisable. See mcp/insurance-council-australia-mcp.yml
+- id: rss-2.0
+  conforms: true
+  evidence: /feed/ returns 200 with content-type application/rss+xml.
+- id: sitemaps-xml
+  conforms: true
+  evidence: /sitemap_index.xml returns 200 with ten child sitemaps.
+- id: rest-pagination-conventions
+  conforms: true
+  evidence: |
+    page/per_page parameters with X-WP-Total, X-WP-TotalPages and RFC 8288 Link
+    rel="next" headers. See conventions/insurance-council-australia-conventions.yml
+- id: idempotency
+  conforms: false
+  evidence: no idempotency key contract is documented or exhibited.
+- id: acord
+  conforms: false
+  evidence: |
+    The site's own search endpoint returned an empty array for ACORD, AL3 and NGDS.
+    No ACORD XML, AL3 flat file, ACORD certification or NGDS reference exists
+    anywhere on insurancecouncil.com.au.
+- id: acord-al3
+  conforms: false
+  evidence: not referenced; Australian market has no IVANS/agency-download convention.
+- id: ngds
+  conforms: false
+  evidence: not referenced.
+- id: consumer-data-right
+  conforms: false
+  evidence: |
+    Australia's CDR was designated to extend to general insurance and then deferred
+    and de-prioritised, so no live open-insurance data-sharing obligation applies to
+    ICA members and none is implemented here.
+- id: fhir-r4
+  conforms: false
+  evidence: not applicable — general insurance market body, no health data exchange.
+- id: fapi
+  conforms: false
+  evidence: |
+    The B2C tenant advertises client_secret_post and client_secret_basic only, with
+    no private_key_jwt, no PAR and no mTLS — none of the FAPI security profile
+    requirements are met.
+compliance_program:
+  published: false
+  certifications: []
+  note: |
+    No SOC 2, ISO 27001, PCI DSS, HIPAA, FedRAMP or CSA STAR claim, and no trust
+    centre, appears on insurancecouncil.com.au. The probe in
+    probe-security-programs.py returned no verified trust-centre or vulnerability
+    disclosure hit. Because there is no published compliance program, no Compliance
+    pointer is emitted for this provider.
+industry_governance:
+  note: |
+    ICA's real conformance surface is not technical — it is the General Insurance
+    Code of Practice it administers, with a published subscriber list and an
+    independent review cycle. It is a documentary rulebook, published as HTML and
+    PDF, with no machine-readable rule corpus.
+  code_of_practice: https://insurancecouncil.com.au/code-of-practice/
+  code_subscribers: https://insurancecouncil.com.au/code-of-practice/code-subscribers/
+  independent_review: https://codeofpracticereview.com.au/

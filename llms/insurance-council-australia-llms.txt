@@ -1,0 +1,53 @@
+# Insurance Council of Australia
+
+> The Insurance Council of Australia (ICA) is the representative body for Australia's general insurance industry; its members write approximately 90% of total premium income for private sector general insurers and reinsurers. It administers the General Insurance Code of Practice, declares catastrophes and significant events, runs a member Data Hub, and advocates on resilience, climate risk and insurance affordability. It is a market body, not a carrier: it sells no policies and exposes no quote, bind, issue or FNOL API.
+
+## What exists
+
+- ICA publishes **no developer portal and no documented API**. developer/developers/docs/api/apis/data/datahub subdomains do not resolve; /developers/, /developer/, /partners/ and /integrations/ return 404.
+- **Watch the homonym trap**: https://insurancecouncil.com.au/api/ returns 200 but redirects to /insurer/apia/ — the member profile for the Australian insurer brand Apia (Australian Pensioners Insurance Agency). It is not an API.
+- The only integration surface is the **member portal login wall** (Azure AD B2C OpenID Connect) for member insurers.
+- ICA's flagship data asset — normalised historical catastrophe losses back to 1967 — is a downloadable **XLSX spreadsheet**, not an API.
+- Two incidental machine-readable surfaces respond anonymously: the standard **WordPress REST API** at /wp-json/ and the standard **RSS feed** at /feed/. Neither is documented by ICA and neither carries an insurance data model.
+
+## APIs
+
+- [WordPress REST API (incidental)](https://insurancecouncil.com.au/wp-json/wp/v2): anonymous read access to pages, media (the PDF publication corpus), categories, tags, taxonomies, statuses, comments and site search. 420 routes across 28 namespaces. /wp/v2/posts is empty and /wp/v2/users returns 401. The insurer, resource, ins-type, ins-topic and campaign custom post types are NOT registered with the REST API.
+- [News RSS feed](https://insurancecouncil.com.au/feed/): RSS 2.0, application/rss+xml. The only first-party syndication surface.
+- [MCP adapter (gated)](https://insurancecouncil.com.au/wp-json/mcp/mcp-adapter-default-server): a WordPress MCP server route is registered — namespace discovery returns 200 — but JSON-RPC initialize and tools/list return 401 rest_forbidden. Not publicly usable.
+
+## Specs and artifacts in this repo
+
+- [REST discovery document](discovery/insurance-council-australia-wp-json-root.json): the verbatim /wp-json/ route table.
+- [JSON Schemas](json-schema/): resource schemas harvested by HTTP OPTIONS for pages, media, categories, tags, types, taxonomies, statuses, search and comments.
+- [Authentication](authentication/insurance-council-australia-authentication.yml): anonymous public reads plus the Azure AD B2C OIDC member gate.
+- [OAuth scopes](scopes/insurance-council-australia-scopes.yml): one scope, `openid` — authentication only, no data scopes.
+- [Well-known index](well-known/insurance-council-australia-well-known.yml): every /.well-known/ path probed and its status.
+- [Conventions](conventions/insurance-council-australia-conventions.yml): pagination, field selection, caching, CORS, versioning, error envelope.
+- [Error catalogue](errors/insurance-council-australia-problem-types.yml): the error codes actually observed on live probes.
+- [Data model](data-model/insurance-council-australia-data-model.yml): the CMS entity graph, and the insurance entities that are absent.
+- [Conformance](conformance/insurance-council-australia-conformance.yml): standards asserted and denied, including ACORD, NGDS and the Consumer Data Right.
+- [Lifecycle](lifecycle/insurance-council-australia-lifecycle.yml): no versioning policy, no deprecation policy, no SLA, no status page.
+- [MCP](mcp/insurance-council-australia-mcp.yml): the gated MCP adapter surface.
+- [Domain security](security/insurance-council-australia-domain-security.yml): TLS, HSTS, DNSSEC, CAA, SPF and DMARC probe results.
+
+## Data and documents (not APIs)
+
+- [ICA Historical Normalised Catastrophe Master, June 2026 (XLSX)](https://insurancecouncil.com.au/wp-content/uploads/2026/07/ICA-Historical-Normalised-Catastrophe-Master-Updated-2026_06.xlsx)
+- [Data Hub](https://insurancecouncil.com.au/industry-members/data-hub/): per-event claim count, claims incurred, outstanding and closed rate, rendered as HTML with no JSON behind it.
+- [Current catastrophes and significant event declarations](https://insurancecouncil.com.au/news-hub/current-catastrophes/)
+- [General Insurance Code of Practice](https://insurancecouncil.com.au/code-of-practice/) and [code subscribers](https://insurancecouncil.com.au/code-of-practice/code-subscribers/)
+- [ICA Reports](https://insurancecouncil.com.au/ica-reports/): PDF report library.
+- [Find an Insurer](https://insurancecouncil.com.au/find-an-insurer/): a directory, served by wp-admin/admin-ajax.php behind a nonce; explicitly not a comparison service.
+
+## Organisation
+
+- [Website](https://insurancecouncil.com.au/)
+- [Our role](https://insurancecouncil.com.au/about-us/our-role/)
+- [Member portal](https://memberportal.insurancecouncil.com.au/)
+- [News hub](https://insurancecouncil.com.au/news-hub/)
+- [Get in touch](https://insurancecouncil.com.au/about-us/get-in-touch/)
+- [Privacy policy](https://insurancecouncil.com.au/about-us/privacy-policy/)
+- [Website terms of use and disclaimer](https://insurancecouncil.com.au/about-us/disclaimer/)
+
+Generated by the API Evangelist enrichment pipeline on 2026-07-25 from live probes. No specification was fabricated; absence is recorded as absence.
