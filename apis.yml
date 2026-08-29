@@ -22,6 +22,17 @@ description: >-
   through an API, and no ACORD, AL3 or NGDS reference appears anywhere on the site —
   Australia's insurance data seam is the Consumer Data Right, which was designated
   for general insurance and then deferred.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
 - Insurance
