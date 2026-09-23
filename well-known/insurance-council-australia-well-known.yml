@@ -1,14 +1,26 @@
-generated: '2026-07-25'
+generated: '2026-09-19'
 method: searched
 source: live probes of every apis.yml host on 2026-07-25
-note: |
-  The Insurance Council of Australia publishes no /.well-known/ discovery surface on
+note: 'The Insurance Council of Australia publishes no /.well-known/ discovery surface on
+
   its own hosts — every RFC-defined path returns 404 on insurancecouncil.com.au and
+
   on the member portal. The single well-known document that does resolve belongs to
+
   the third-party identity provider behind the member portal login wall: the Azure
+
   AD B2C tenant icab2cprod.b2clogin.com, whose OpenID Connect discovery document
+
   returns HTTP 200 anonymously. It is captured verbatim because it is the only
+
   machine-readable authorization contract on the ICA estate.
+
+
+
+  MCP-host OAuth discovery added 2026-09-19 (roadmap#321/#337): the harvest visits a provider''s primary
+  hosts, and RFC 9728 protected-resource metadata lives on the MCP host, so these documents existed and
+  were invisible to the scorer. Fetched live and validated on `resource`/`issuer`; one negative control
+  per host.'
 hosts:
 - host: https://insurancecouncil.com.au
   documents:
@@ -28,6 +40,15 @@ hosts:
     status: 404
   - path: /llms.txt
     status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: insurance-council-australia-insurancecouncil-oauth-protected-resource.json
+    bytes: 207
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: insurance-council-australia-insurancecouncil-oauth-authorization-server.json
+    bytes: 583
+  path_echo_control: passed
 - host: https://memberportal.insurancecouncil.com.au
   documents:
   - path: /.well-known/security.txt
@@ -48,3 +69,15 @@ hosts:
 security_txt:
   exists: false
   note: No RFC 9116 security.txt is published at either the apex or the member portal.
+x-mcp-probe:
+  probed: '2026-09-19'
+  issue: roadmap#321, roadmap#337
+  documents:
+  - host: https://insurancecouncil.com.au
+    path: /.well-known/oauth-protected-resource
+    file: insurance-council-australia-insurancecouncil-oauth-protected-resource.json
+  - host: https://insurancecouncil.com.au
+    path: /.well-known/oauth-authorization-server
+    file: insurance-council-australia-insurancecouncil-oauth-authorization-server.json
+  validated_on: resource (RFC 9728) / issuer (RFC 8414, OIDC)
+  negative_control: one per host; a 2xx JSON object at an impossible path discards the host
