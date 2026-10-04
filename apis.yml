@@ -62,58 +62,20 @@ created: '2026-07-25'
 modified: '2026-07-25'
 specificationVersion: '0.23'
 apis:
-- aid: insurance-council-australia:wordpress-rest-api
-  name: Insurance Council of Australia WordPress REST API
-  description: insurancecouncil.com.au runs on WordPress and leaves the standard
-    WordPress REST API reachable anonymously at /wp-json/, returning JSON for pages,
-    media (the PDF publication corpus of media releases, submissions and reports),
-    categories, tags and site search. This is incidental CMS infrastructure rather
-    than an ICA API product — the ICA publishes no documentation for it, /wp/v2/posts
-    returns an empty array, /wp/v2/users returns 401, and the insurer, resource and
-    insurance-type custom post types behind Find an Insurer are not registered with
-    the REST API (that directory is served by wp-admin/admin-ajax.php instead). It
-    carries no insurance data model, no quote, bind, issue or FNOL operations, and
-    no authentication for the read paths.
-  humanURL: https://developer.wordpress.org/rest-api/
-  baseURL: https://insurancecouncil.com.au/wp-json/wp/v2
+- aid: insurance-council-australia:insurancecouncil-com-au-website-wordpress-rest
+  name: Insurance Council of Australia Website (WordPress REST)
+  description: 'The public WordPress REST API (wp-json) of the Insurance Council of Australia website
+    at insurancecouncil.com.au: the route index of the site''s content management system, catalogued as
+    one site surface rather than as separate APIs.'
+  baseURL: https://insurancecouncil.com.au/wp-json
   tags:
-  - Content
   - WordPress
-  - REST
-  - JSON
+  x-surface: platform-generated
   properties:
   - type: Documentation
-    url: https://developer.wordpress.org/rest-api/
-  - type: APIReference
-    url: https://developer.wordpress.org/rest-api/reference/
-  - type: Discovery
-    url: https://insurancecouncil.com.au/wp-json/
-  - type: DiscoveryDocument
-    url: discovery/insurance-council-australia-wp-json-root.json
-  - type: JSONSchema
-    url: json-schema/insurance-council-australia-wp-v2-pages.json
-  - type: JSONSchema
-    url: json-schema/insurance-council-australia-wp-v2-media.json
-  - type: JSONSchema
-    url: json-schema/insurance-council-australia-wp-v2-categories.json
-  - type: JSONSchema
-    url: json-schema/insurance-council-australia-wp-v2-tags.json
-  - type: JSONSchema
-    url: json-schema/insurance-council-australia-wp-v2-types.json
-  - type: JSONSchema
-    url: json-schema/insurance-council-australia-wp-v2-taxonomies.json
-  - type: JSONSchema
-    url: json-schema/insurance-council-australia-wp-v2-statuses.json
-  - type: JSONSchema
-    url: json-schema/insurance-council-australia-wp-v2-search.json
-  - type: JSONSchema
-    url: json-schema/insurance-council-australia-wp-v2-comments.json
-  - type: ErrorCatalog
-    url: errors/insurance-council-australia-problem-types.yml
-  - type: Conventions
-    url: conventions/insurance-council-australia-conventions.yml
-  - type: DataModel
-    url: data-model/insurance-council-australia-data-model.yml
+    url: https://insurancecouncil.com.au/wp-json
+  x-platform: wordpress
+  x-platform-surface: rest
 - aid: insurance-council-australia:mcp-adapter
   name: Insurance Council of Australia WordPress MCP Adapter (gated)
   description: A WordPress MCP adapter server route is registered on the ICA estate
@@ -136,6 +98,9 @@ apis:
     url: mcp/insurance-council-australia-mcp.yml
   - type: Discovery
     url: https://insurancecouncil.com.au/wp-json/mcp
+  x-surface: platform-generated
+  x-platform: wordpress
+  x-platform-surface: mcp-plugin
 - aid: insurance-council-australia:news-rss-feed
   name: Insurance Council of Australia News RSS Feed
   description: The ICA publishes its news, media releases, catastrophe declarations
@@ -144,7 +109,6 @@ apis:
     surface the organisation advertises, and it is read-only, unauthenticated and
     undocumented beyond the WordPress default.
   humanURL: https://insurancecouncil.com.au/news-hub/
-  baseURL: https://insurancecouncil.com.au
   tags:
   - Feed
   - News
